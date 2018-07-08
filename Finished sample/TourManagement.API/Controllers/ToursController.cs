@@ -156,17 +156,17 @@ namespace TourManagement.API.Controllers
             return await AddSpecificTour(tour);
         }
 
-        private async Task<IActionResult> GetSpecificTour<T>(Guid tourId,
-                bool includeShows = false) where T : class
+        private async Task<IActionResult> GetSpecificTour<T>(Guid tourId, bool includeShows = false) where T : class
         {
             var tourFromRepo = await _tourManagementRepository.GetTour(tourId, includeShows);
 
-            if (tourFromRepo == null)
-            {
-                return BadRequest();
-            }
+            if (tourFromRepo == null) { return BadRequest(); }
 
+            // ************ The Mapper.Map will create an instance of T and then map stuff from tourFromRepo to it and return it
             return Ok(Mapper.Map<T>(tourFromRepo));
+            //              So, the above is really 
+            //                   var x = Mapper.Map<T>(tourFromRepo);
+            //                   return Ok(x)
         }
 
         public async Task<IActionResult> AddSpecificTour<T>(T tour) where T : class
