@@ -22,30 +22,21 @@ namespace TourManagement.API.Controllers
             _tourManagementRepository = tourManagementRepository;
         }
 
-        // api/tours/{tourId}/showcollections/(id1,id2, … )
+        // **************************   api/tours/{tourId}/showcollections/(id1,id2, … )
         [HttpGet("({showIds})", Name ="GetShowCollection")]
-        [RequestHeaderMatchesMediaType("Accept", new[] { "application/json",
-            "application/vnd.marvin.showcollection+json" })]
-        public async Task<IActionResult> GetShowCollection(Guid tourId,
-          [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> showIds)
+        [RequestHeaderMatchesMediaType("Accept", new[] { "application/json", "application/vnd.marvin.showcollection+json" })]
+        public async Task<IActionResult> GetShowCollection(
+                            Guid tourId,
+                            [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> showIds)
         {
-            if (showIds == null || !showIds.Any())
-            {
-                return BadRequest();
-            }
+            if (showIds == null || !showIds.Any()) { return BadRequest();  }
             
             // check if the tour exists
-            if (!await _tourManagementRepository.TourExists(tourId))
-            {
-                return NotFound();
-            }
+            if (!await _tourManagementRepository.TourExists(tourId))  { return NotFound();  }
 
             var showEntities = await _tourManagementRepository.GetShows(tourId, showIds);
 
-            if (showIds.Count() != showEntities.Count())
-            {
-                return NotFound();
-            }
+            if (showIds.Count() != showEntities.Count())  { return NotFound();  }
 
             var showCollectionToReturn = Mapper.Map<IEnumerable<Show>>(showEntities);
             return Ok(showCollectionToReturn);            
@@ -53,22 +44,14 @@ namespace TourManagement.API.Controllers
 
 
         [HttpPost]
-        [RequestHeaderMatchesMediaType("Content-Type", 
-            new[] { "application/json",
-            "application/vnd.marvin.showcollectionforcreation+json" })]
+        [RequestHeaderMatchesMediaType("Content-Type", new[] { "application/json", "application/vnd.marvin.showcollectionforcreation+json" })]
         public async Task<IActionResult> CreateShowCollection(
-           Guid tourId,
-           [FromBody] IEnumerable<ShowForCreation> showCollection)
+                        Guid tourId,
+                        [FromBody] IEnumerable<ShowForCreation> showCollection)
         {
-            if (showCollection == null)
-            {
-                return BadRequest();
-            }
+            if (showCollection == null) { return BadRequest();  }
 
-            if (!await _tourManagementRepository.TourExists(tourId))
-            {
-                return NotFound();
-            }
+            if (!await _tourManagementRepository.TourExists(tourId)) { return NotFound();   }
 
             var showEntities = Mapper.Map<IEnumerable<Entities.Show>>(showCollection);
 
