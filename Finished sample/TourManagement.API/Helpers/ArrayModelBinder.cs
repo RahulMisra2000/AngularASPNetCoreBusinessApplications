@@ -7,6 +7,19 @@ using System.Threading.Tasks;
 
 namespace TourManagement.API.Helpers
 {
+
+
+    // ******************* This is a custom ModelBinder that will take an array of Guids coming in an Http Request
+    //                      api/tours/{tourId}/showcollections/(id1,id2, … )
+    //    and convert it to an IEnumerable<Guids> and place it in the Action's parameter showIds
+    //          [Route("api/tours/{tourId}/showcollections")]
+    //          ...
+    //          [HttpGet("({showIds})", Name ="GetShowCollection")]
+    //          public async Task<IActionResult> GetShowCollection( Guid tourId,
+    //                        [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> showIds)
+    //    The above says that for the showIds parameter, use the custom Model Binder to take the (id1, id2, etc) from the Http Request
+    //    and stuff it in the showIds because the standard ModelBinder cannot deal with this unusual case ....
+            
     public class ArrayModelBinder : IModelBinder
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)
