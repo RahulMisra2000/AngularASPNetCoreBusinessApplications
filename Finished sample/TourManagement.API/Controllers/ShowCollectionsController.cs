@@ -23,6 +23,7 @@ namespace TourManagement.API.Controllers
         }
 
         // **************************   api/tours/{tourId}/showcollections/(id1,id2, … )
+        //                                                                 ({showIds}  )
         [HttpGet("({showIds})", Name ="GetShowCollection")]
         [RequestHeaderMatchesMediaType("Accept", new[] { "application/json", "application/vnd.marvin.showcollection+json" })]
         public async Task<IActionResult> GetShowCollection(
