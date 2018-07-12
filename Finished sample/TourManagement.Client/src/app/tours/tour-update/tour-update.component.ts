@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common'
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { TourForUpdate } from '../shared/tour-for-update.model';
+
+// ************* This library allows you to compare 2 objects and based on the differences it creates a patch document
 import { compare } from 'fast-json-patch';
 import { CustomValidators } from '../../shared/custom-validators';
 
@@ -89,6 +91,7 @@ export class TourUpdateComponent implements OnInit, OnDestroy {
         'TourForUpdate',
         this.tourForm.value);
 
+      // **********************  Comparing the objects to create a Patch document
       let patchDocument = compare(this.originalTourForUpdate, changedTourForUpdate);
 
       this.tourService.partiallyUpdateTour(this.tourId, patchDocument)
