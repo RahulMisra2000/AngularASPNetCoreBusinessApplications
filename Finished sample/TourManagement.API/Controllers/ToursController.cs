@@ -211,38 +211,35 @@ namespace TourManagement.API.Controllers
         public async Task<IActionResult> PartiallyUpdateTour(Guid tourId,
           [FromBody] JsonPatchDocument<TourForUpdate> jsonPatchDocument)
         {
-            if (jsonPatchDocument == null)
-            {
-                return BadRequest();
-            }
+            if (jsonPatchDocument == null) { return BadRequest();  }
 
             var tourFromRepo = await _tourManagementRepository.GetTour(tourId);
 
-            if (tourFromRepo == null)
-            {
-                return BadRequest();
-            }
+            if (tourFromRepo == null) { return BadRequest();  }
 
+            // We are creating a fresh DTO from EF info
             var tourToPatch = Mapper.Map<TourForUpdate>(tourFromRepo);
 
+            // Then we apply the patch document received from the client to the above DTO
+            // Any errors duing the patching will be written to the ModelState
             jsonPatchDocument.ApplyTo(tourToPatch, ModelState);
 
-            if (!ModelState.IsValid)
-            {
+            // Make sure there were no errors during Patching
+            if (!ModelState.IsValid) {
                 return new UnprocessableEntityObjectResult(ModelState);
             }
 
-            if (!TryValidateModel(tourToPatch))
-            {
+            // Make sure that the DTO is valid ... I guess there must be data validation attributes on the DTO type "TourForUpdate"
+            if (!TryValidateModel(tourToPatch))  {
                 return new UnprocessableEntityObjectResult(ModelState);
             }
 
+            // Now map the DTO to EF in preparation for the record to be updated
             Mapper.Map(tourToPatch, tourFromRepo);
 
             await _tourManagementRepository.UpdateTour(tourFromRepo);
 
-            if (!await _tourManagementRepository.SaveAsync())
-            {
+            if (!await _tourManagementRepository.SaveAsync()) {
                 throw new Exception("Updating a tour failed on save.");
             }
 
