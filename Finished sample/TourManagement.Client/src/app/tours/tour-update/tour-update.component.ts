@@ -91,7 +91,7 @@ export class TourUpdateComponent implements OnInit, OnDestroy {
         'TourForUpdate',
         this.tourForm.value);
 
-      // **********************  Comparing the objects to create a Patch document
+      // **********************  Comparing the objects to create a Patch document that needs to be sent to the Web API
       let patchDocument = compare(this.originalTourForUpdate, changedTourForUpdate);
 
       this.tourService.partiallyUpdateTour(this.tourId, patchDocument)
