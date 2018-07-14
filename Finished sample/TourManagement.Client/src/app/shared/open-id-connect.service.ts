@@ -54,8 +54,11 @@ export class OpenIdConnectService {
 
   // ************ This method will parse the url for the hash fragment and take some of that content and create
   //              a user object that it will stuff in Session Storage
-  //              The user is now signed in with the IdentityServer and even if I delete the SessionStorage and refresh the
-  //              Angular application, the user object gets recreated because behind the scene 
+  //              The user is now signed in with the IdentityServer ... I think cookie mechanism .....
+  //              
+  //              Even if I delete the SessionStorage and then refresh the Angular application
+  //              the user object gets recreated in SessionStorage provided the user is still signed in with the IdentityServer4 
+  //              because what happens is that a redirect happens to IdentityServer4 and it returns the tokens .... etc.
   handleCallback() {
     this.userManager.signinRedirectCallback().then(function (user) {
       if (!environment.production) {
