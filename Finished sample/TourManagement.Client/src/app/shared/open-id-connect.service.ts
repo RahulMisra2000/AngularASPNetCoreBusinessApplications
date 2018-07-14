@@ -23,6 +23,7 @@ export class OpenIdConnectService {
   constructor() {
     this.userManager.clearStaleState();
 
+    // ************ Event handler we can write for when a user is signed in with IdentityServer4
     this.userManager.events.addUserLoaded(user => {
       if (!environment.production) {
         console.log('User loaded.', user);
@@ -31,6 +32,7 @@ export class OpenIdConnectService {
       this.userLoaded$.next(true);
     });
 
+    // ************ Event handler we can write for when a user is signed out with IdentityServer4
     this.userManager.events.addUserUnloaded((e) => {
       if (!environment.production) {
         console.log('User unloaded');
@@ -53,7 +55,7 @@ export class OpenIdConnectService {
   // ************ This method will parse the url for the hash fragment and take some of that content and create
   //              a user object that it will stuff in Session Storage
   //              The user is now signed in with the IdentityServer and even if I delete the SessionStorage and refresh the
-  //              Angular application, the user object gets recreated behind the scenes ...
+  //              Angular application, the user object gets recreated because behind the scene 
   handleCallback() {
     this.userManager.signinRedirectCallback().then(function (user) {
       if (!environment.production) {
