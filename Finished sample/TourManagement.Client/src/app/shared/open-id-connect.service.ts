@@ -71,7 +71,7 @@ export class OpenIdConnectService {
   }
 
   // ************* When WE call this method, it will sign the user out with IdentityServer4 by calling the 
-  //               END SESSION Endpoint at IdentityServer4 and delete the Session Storage as well
+  //               ENDSESSION Endpoint at IdentityServer4 and delete the Session Storage as well
   triggerSignOut() {
     this.userManager.signoutRedirect().then(function (resp) {
       if (!environment.production) {
