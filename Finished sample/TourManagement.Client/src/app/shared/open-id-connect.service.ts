@@ -41,6 +41,7 @@ export class OpenIdConnectService {
 
   }
 
+  // ************ Calls the IdentityServer4 to do authentication ... 
   triggerSignIn() {
     this.userManager.signinRedirect().then(function () {
       if (!environment.production) {
@@ -49,6 +50,10 @@ export class OpenIdConnectService {
     });
   }
 
+  // ************ This method will parse the url for the hash fragment and take some of that content and create
+  //              a user object that it will stuff in Session Storage
+  //              The user is now signed in with the IdentityServer and even if I delete the SessionStorage and refresh the
+  //              Angular application, the user object gets recreated behind the scenes ...
   handleCallback() {
     this.userManager.signinRedirectCallback().then(function (user) {
       if (!environment.production) {
@@ -57,10 +62,7 @@ export class OpenIdConnectService {
     });
   }
 
-  // ************ This method will parse the url for the hash fragment and take some of that content and create
-  //              a user object that it will stuff in Session Storage
-  //              The user is now signed in with the IdentityServer and even if I delete the SessionStorage and refresh the
-  //              Angular application, the user object gets recreated behind the scenes ...
+  
   handleSilentCallback() {
     this.userManager.signinSilentCallback().then(function (user) {
       this.currentUser = user
@@ -70,8 +72,8 @@ export class OpenIdConnectService {
     });
   }
 
-  // ************* When WE call this method, it will sign the user out with IdentityServer4 by calling the 
-  //               ENDSESSION Endpoint at IdentityServer4 and delete the Session Storage as well
+  // ************* When WE call this method, signoutRedirect() will call the ENDSESSION Endpoint at IdentityServer4 
+  //               and sign the user out with IdentityServer4 and then delete the Session Storage as well
   triggerSignOut() {
     this.userManager.signoutRedirect().then(function (resp) {
       if (!environment.production) {
