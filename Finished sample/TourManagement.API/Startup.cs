@@ -29,18 +29,18 @@ namespace TourManagement.API
         {
             services.AddAuthorization(options =>
             {
+                // ***************** Adding Authorization Policies ***********************************************
                 options.AddPolicy("UserMustBeAdministrator", policyBuilder =>
                 {
                     policyBuilder.RequireAuthenticatedUser();
                     policyBuilder.RequireRole("Administrator");
                 });
-                options.AddPolicy(
-                   "UserMustBeTourManager",
-                   policyBuilder =>
+                
+                // ***************** Adding Authorization Policies ***********************************************
+                options.AddPolicy("UserMustBeTourManager",  policyBuilder =>
                    {
                        policyBuilder.RequireAuthenticatedUser();
-                       policyBuilder.AddRequirements(
-                         new UserMustBeTourManagerRequirement("Administrator"));
+                       policyBuilder.AddRequirements(new UserMustBeTourManagerRequirement("Administrator"));
                    });
             });
 
